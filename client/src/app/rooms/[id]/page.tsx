@@ -4,16 +4,24 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import React, { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
+import axios from "axios";
+import { set } from "react-hook-form";
 
 type Message = {
-  // id: string;
-  sender: string;
+  id: string;
+  author: string;
   text: string;
+};
+
+type Room = {
+  id: string;
+  name: string;
+  messages: Message[];
 };
 
 export default function Room({ params }: { params: { id: string } }) {
   const [name, setName] = useState<string>("");
-
+  const [room, setRoom] = useState<Room>();
   const [messages, setMessages] = useState<Message[]>([]);
   const [message, setMessage] = useState("");
   const socket = io("http://localhost:4000");
@@ -27,14 +35,24 @@ export default function Room({ params }: { params: { id: string } }) {
       window.location.href = "/";
     }
 
-    socket.on("connect", () => {
-      console.log("connected");
-    });
+    const fetchRoom = async () => {
+      const room = await axios.get(
+        `http://localhost:4000/api/rooms/${params.id}`
+      );
+      setMessages(room.data.messages);
+      setRoom(room.data);
+    };
+
+    fetchRoom();
 
     // Add a listener for incoming messages
     const handleIncomingMessage = (msg: Message) => {
       setMessages((prevMessages) => [...prevMessages, msg]);
     };
+
+    socket.on("connect", () => {
+      console.log("connected");
+    });
 
     // Add the listener
     socket.on("chat", handleIncomingMessage);
@@ -47,7 +65,7 @@ export default function Room({ params }: { params: { id: string } }) {
 
   const handleSendMessage = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    socket.emit("chat", { sender: name, text: message });
+    socket.emit("chat", { roomId: params.id, author: name, text: message });
     setMessage("");
   };
 
@@ -68,7 +86,7 @@ export default function Room({ params }: { params: { id: string } }) {
       </h1>
       <h2 className="text-xl">
         Username: <span className="text-orange-500"> {name}</span> Room:{" "}
-        <span className="text-orange-500"> {params.id}</span>
+        <span className="text-orange-500"> {room?.name}</span>
       </h2>
       <div
         ref={chatRef}
@@ -76,7 +94,7 @@ export default function Room({ params }: { params: { id: string } }) {
       >
         {messages.map((message, index) => (
           <div key={index}>
-            {message.sender} 👉 {message.text}
+            {message.author} 👉 {message.text}
           </div>
         ))}
       </div>
