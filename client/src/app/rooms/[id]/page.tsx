@@ -1,6 +1,8 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import React, { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 
 type Message = {
@@ -9,8 +11,8 @@ type Message = {
   text: string;
 };
 
-export default function Room() {
-  const [value, setValue] = useState<string>("");
+export default function Room({ params }: { params: { id: string } }) {
+  const [name, setName] = useState<string>("");
 
   const [messages, setMessages] = useState<Message[]>([]);
   const [message, setMessage] = useState("");
@@ -20,7 +22,7 @@ export default function Room() {
     const sessionString = sessionStorage.getItem("myvalue");
 
     if (sessionString) {
-      setValue(sessionString);
+      setName(sessionString);
     } else {
       window.location.href = "/";
     }
@@ -45,33 +47,48 @@ export default function Room() {
 
   const handleSendMessage = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    socket.emit("chat", { sender: value, text: message });
+    socket.emit("chat", { sender: name, text: message });
     setMessage("");
   };
 
+  const chatRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // Scroll to bottom of a chat window
+    chatRef.current?.scroll({
+      top: chatRef.current.scrollHeight,
+      behavior: "smooth",
+    });
+  }, [messages]);
+
   return (
-    <div>
-      <form onSubmit={handleSendMessage} className="flex">
-        <input
-          type="text"
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-        />
-        <button
-          type="submit"
-          className="inline-block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none"
-        >
-          Send
-        </button>
-      </form>
-      <div className="my-6">
+    <main className="container mx-auto">
+      <h1 className="text-center text-3xl font-bold mt-24 mb-12">
+        Real-Time Chat
+      </h1>
+      <h2 className="text-xl">
+        Username: <span className="text-orange-500"> {name}</span> Room:{" "}
+        <span className="text-orange-500"> {params.id}</span>
+      </h2>
+      <div
+        ref={chatRef}
+        className="h-[400px] overflow-scroll border my-6 px-3 py-1 space-y-1"
+      >
         {messages.map((message, index) => (
           <div key={index}>
             {message.sender} 👉 {message.text}
           </div>
         ))}
       </div>
-    </div>
+      <form onSubmit={handleSendMessage} className="flex gap-2">
+        <Input
+          type="text"
+          value={message}
+          placeholder="Type your message..."
+          onChange={(e) => setMessage(e.target.value)}
+        />
+        <Button type="submit">Send</Button>
+      </form>
+    </main>
   );
 }

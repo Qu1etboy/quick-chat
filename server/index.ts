@@ -26,6 +26,9 @@ io.on("connection", (socket: Socket) => {
 
   socket.on("chat", (msg: any) => {
     console.log("From Client: " + msg);
+
+    // Store the message in the database
+
     io.emit("chat", msg);
     // console.log("To Client: " + msg);
   });
