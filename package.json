@@ -1,0 +1,10 @@
+{
+  "name": "client",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "turbo dev"
+  },
+  "dependencies": {
+    "turbo": "^1.11.3"
+  }
+}
