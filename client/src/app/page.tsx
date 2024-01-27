@@ -12,12 +12,20 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 export default function Home() {
   const [name, setName] = useState<string>("");
   const [roomName, setRoomName] = useState<string>("");
   const [roomId, setRoomId] = useState<string>("");
+
+  useEffect(() => {
+    const sessionString = sessionStorage.getItem("myvalue");
+
+    if (sessionString) {
+      setName(sessionString);
+    }
+  }, []);
 
   function handleSetName() {
     sessionStorage.setItem("myvalue", name);
