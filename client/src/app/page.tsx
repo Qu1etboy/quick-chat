@@ -24,7 +24,6 @@ export default function Home() {
   }
 
   async function createRoom() {
-    console.log(process.env.NEXT_PUBLIC_BACKEND_URL);
     const room = await axios.post(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/rooms`,
       {
