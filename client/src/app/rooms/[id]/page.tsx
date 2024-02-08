@@ -29,7 +29,7 @@ export default function Room({ params }: { params: { id: string } }) {
   const [room, setRoom] = useState<Room>();
   const [messages, setMessages] = useState<Message[]>([]);
   const [message, setMessage] = useState("");
-  const socket = io("http://localhost:4000");
+  const socket = io(process.env.NEXT_PUBLIC_BACKEND_URL as string);
 
   useEffect(() => {
     const sessionString = sessionStorage.getItem("name");
