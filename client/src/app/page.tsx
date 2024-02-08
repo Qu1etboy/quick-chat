@@ -1,5 +1,6 @@
 "use client";
 
+import NameForm from "@/components/shared/name-form";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -12,34 +13,17 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 export default function Home() {
-  const [name, setName] = useState<string>("");
   const [roomName, setRoomName] = useState<string>("");
   const [roomId, setRoomId] = useState<string>("");
 
-  useEffect(() => {
-    const sessionString = sessionStorage.getItem("name");
-
-    if (sessionString) {
-      setName(sessionString);
-    }
-  }, []);
-
-  function handleSetName() {
-    sessionStorage.setItem("name", name);
-    setName("");
-  }
-
   function joinRoom() {
-    handleSetName();
     window.location.href = `/rooms/${roomId}`;
   }
 
   async function createRoom() {
-    handleSetName();
-
     const room = await axios.post("http://localhost:4000/api/rooms", {
       name: roomName,
     });
@@ -61,15 +45,7 @@ export default function Home() {
           talking!
         </p>
         <section className="mt-12">
-          <Label>Name</Label>
-          <Input
-            value={name}
-            placeholder="Enter your name"
-            onChange={(e) => setName(e.target.value)}
-          />
-          <p className="mt-1 text-sm text-gray-600">
-            Enter your name to be display when chatting.
-          </p>
+          <NameForm />
           <div className="flex justify-center my-8 space-x-2">
             <Dialog>
               <DialogTrigger asChild>

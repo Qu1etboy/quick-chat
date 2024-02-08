@@ -37,7 +37,7 @@ export default function Room({ params }: { params: { id: string } }) {
     if (sessionString) {
       setName(sessionString);
     } else {
-      window.location.href = "/";
+      window.location.href = `/join/${params.id}`;
     }
 
     const fetchRoom = async () => {
