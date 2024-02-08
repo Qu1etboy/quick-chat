@@ -20,7 +20,7 @@ export default function Home() {
   const [roomId, setRoomId] = useState<string>("");
 
   useEffect(() => {
-    const sessionString = sessionStorage.getItem("myvalue");
+    const sessionString = sessionStorage.getItem("name");
 
     if (sessionString) {
       setName(sessionString);
@@ -28,7 +28,7 @@ export default function Home() {
   }, []);
 
   function handleSetName() {
-    sessionStorage.setItem("myvalue", name);
+    sessionStorage.setItem("name", name);
     setName("");
   }
 
@@ -48,62 +48,99 @@ export default function Home() {
   }
 
   return (
-    <main className="container mx-auto">
-      <h1 className="text-center text-3xl font-bold mt-24 mb-12">
-        Real-Time Chat
-      </h1>
-      <Label>Username</Label>
-      <Input
-        value={name}
-        placeholder="Username"
-        onChange={(e) => setName(e.target.value)}
-      />
-      <div className="my-2 space-x-2">
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button className="bg-blue-700 hover:bg-blue-800">Join Room</Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Create a Room</DialogTitle>
-              {/* <DialogDescription>
-                This action cannot be undone. This will permanently delete your
-                account and remove your data from our servers.
-              </DialogDescription> */}
-            </DialogHeader>
-            <Label>Room Id</Label>
-            <Input
-              value={roomId}
-              placeholder="Room id to join"
-              onChange={(e) => setRoomId(e.target.value)}
-            />
-            <Button onClick={joinRoom}>Join</Button>
-          </DialogContent>
-        </Dialog>
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button className="bg-green-700 hover:bg-green-800">
-              Create Room
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Create a Room</DialogTitle>
-              {/* <DialogDescription>
-                This action cannot be undone. This will permanently delete your
-                account and remove your data from our servers.
-              </DialogDescription> */}
-            </DialogHeader>
-            <Label>Room Name</Label>
-            <Input
-              value={roomName}
-              placeholder="Your room name"
-              onChange={(e) => setRoomName(e.target.value)}
-            />
-            <Button onClick={createRoom}>Create Room</Button>
-          </DialogContent>
-        </Dialog>
-      </div>
-    </main>
+    <>
+      <main className="container mx-auto max-w-3xl py-24">
+        <div className="group mx-auto flex max-w-fit items-center justify-center space-x-2 overflow-hidden rounded-full border border-gray-200 bg-white px-7 py-2 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.1)] backdrop-blur transition-all hover:border-gray-300 hover:bg-white/50">
+          🎉 Project 1 Socket Programming
+        </div>
+        <h1 className="text-center mt-10 font-display text-3xl font-extrabold leading-[1.15] text-black sm:text-5xl sm:leading-[1.15]">
+          Quickly Chat With Your Friends
+        </h1>
+        <p className="mt-5 text-gray-600 text-center text-lg">
+          Easily chat with your friends just invite them to the room and start
+          talking!
+        </p>
+        <section className="mt-12">
+          <Label>Name</Label>
+          <Input
+            value={name}
+            placeholder="Enter your name"
+            onChange={(e) => setName(e.target.value)}
+          />
+          <p className="mt-1 text-sm text-gray-600">
+            Enter your name to be display when chatting.
+          </p>
+          <div className="flex justify-center my-8 space-x-2">
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button className="bg-blue-700 hover:bg-blue-800 rounded-full">
+                  Join Room
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Join a Room</DialogTitle>
+                  <DialogDescription>
+                    Enter your friend&apos;s room id to join.
+                  </DialogDescription>
+                </DialogHeader>
+                <div>
+                  <Label>Room Id</Label>
+                  <Input
+                    value={roomId}
+                    placeholder="Room id to join"
+                    onChange={(e) => setRoomId(e.target.value)}
+                  />
+                </div>
+                <Button onClick={joinRoom}>Join</Button>
+              </DialogContent>
+            </Dialog>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button className="bg-green-700 hover:bg-green-800 rounded-full">
+                  Create Room
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Create a Room</DialogTitle>
+                  <DialogDescription>
+                    Create a room and invite your friends to join.
+                  </DialogDescription>
+                </DialogHeader>
+                <div>
+                  <Label>Room Name</Label>
+                  <Input
+                    value={roomName}
+                    placeholder="Your room name"
+                    onChange={(e) => setRoomName(e.target.value)}
+                  />
+                </div>
+                <Button onClick={createRoom}>Create Room</Button>
+              </DialogContent>
+            </Dialog>
+          </div>
+        </section>
+      </main>
+      <footer className="text-center text-gray-600 text-sm mt-8">
+        <p>
+          Made with 🧙 by{" "}
+          <a
+            href="https://qu1etboy.dev"
+            target="_blank"
+            className="text-orange-500 hover:underline"
+          >
+            6410406860 Weerawong Vonggatunyu
+          </a>
+        </p>
+        <a
+          href="https://github.com/Qu1etboy/cs351-socket-programming"
+          target="_blank"
+          className="text-orange-500 hover:underline"
+        >
+          Source code
+        </a>
+      </footer>
+    </>
   );
 }

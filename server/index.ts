@@ -76,11 +76,11 @@ io.on("connection", (socket: Socket) => {
     console.log("From Client: " + msg);
 
     // Store the message in the database
-    await prisma.message.create({
+    const message = await prisma.message.create({
       data: msg,
     });
 
-    io.emit("chat", msg);
+    io.emit("chat", message);
     // console.log("To Client: " + msg);
   });
 });
