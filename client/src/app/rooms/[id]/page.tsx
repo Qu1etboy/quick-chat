@@ -8,6 +8,7 @@ import axios from "axios";
 import { format } from "date-fns";
 import { Copy, LogOut, Send } from "lucide-react";
 import CopyButton from "@/components/shared/copy-button";
+import randomColor from "randomcolor";
 
 type Message = {
   id: string;
@@ -127,7 +128,17 @@ export default function Room({ params }: { params: { id: string } }) {
             <span className="text-gray-500 text-sm">
               {format(new Date(message.createdAt), "PP")}
             </span>{" "}
-            {message.author} 👉 {message.text}
+            <span
+              style={{
+                color: randomColor({
+                  seed: message.author,
+                  luminosity: "dark",
+                }),
+              }}
+            >
+              {message.author}
+            </span>{" "}
+            👉 {message.text}
           </div>
         ))}
       </div>
