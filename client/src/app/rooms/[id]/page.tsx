@@ -42,7 +42,7 @@ export default function Room({ params }: { params: { id: string } }) {
 
     const fetchRoom = async () => {
       const room = await axios.get(
-        `http://localhost:4000/api/rooms/${params.id}`
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/rooms/${params.id}`
       );
       setMessages(room.data.messages);
       setRoom(room.data);

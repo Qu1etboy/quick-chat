@@ -24,9 +24,13 @@ export default function Home() {
   }
 
   async function createRoom() {
-    const room = await axios.post("http://localhost:4000/api/rooms", {
-      name: roomName,
-    });
+    console.log(process.env.NEXT_PUBLIC_BACKEND_URL);
+    const room = await axios.post(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/rooms`,
+      {
+        name: roomName,
+      }
+    );
 
     window.location.href = `/rooms/${room.data.id}`;
   }
