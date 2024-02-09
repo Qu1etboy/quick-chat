@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import axios from "axios";
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 
 export default function Home() {
   const [roomName, setRoomName] = useState<string>("");
@@ -24,14 +25,23 @@ export default function Home() {
   }
 
   async function createRoom() {
-    const room = await axios.post(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/rooms`,
-      {
-        name: roomName,
-      }
-    );
+    if (!roomName) {
+      return toast.error("Please enter a room name");
+    }
 
-    window.location.href = `/rooms/${room.data.id}`;
+    try {
+      const room = await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/rooms`,
+        {
+          name: roomName,
+        }
+      );
+
+      window.location.href = `/rooms/${room.data.id}`;
+    } catch (error) {
+      toast.error("Failed to create room");
+      console.error(error);
+    }
   }
 
   return (

@@ -9,6 +9,7 @@ import { format } from "date-fns";
 import { Copy, LogOut, Send } from "lucide-react";
 import CopyButton from "@/components/shared/copy-button";
 import randomColor from "randomcolor";
+import toast from "react-hot-toast";
 
 type Message = {
   id: string;
@@ -41,11 +42,16 @@ export default function Room({ params }: { params: { id: string } }) {
     }
 
     const fetchRoom = async () => {
-      const room = await axios.get(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/rooms/${params.id}`
-      );
-      setMessages(room.data.messages);
-      setRoom(room.data);
+      try {
+        const room = await axios.get(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/rooms/${params.id}`
+        );
+        setMessages(room.data.messages);
+        setRoom(room.data);
+      } catch (error) {
+        toast.error("Room not found");
+        console.error(error);
+      }
     };
 
     fetchRoom();
