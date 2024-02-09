@@ -105,8 +105,8 @@ export default function Room({ params }: { params: { id: string } }) {
           <h1 className="text-center text-3xl font-bold mt-24 mb-12">
             <span className="text-orange-500"> {room?.name}</span>&apos;s Room
           </h1>
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl">
+          <div className="sm:flex items-center justify-between">
+            <h2 className="text-xl md:mb-0 mb-3">
               Username: <span className="text-orange-500"> {name}</span>
             </h2>
             <div className="space-x-3">
